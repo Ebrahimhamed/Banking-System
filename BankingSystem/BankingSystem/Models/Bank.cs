@@ -15,14 +15,20 @@ namespace BankingSystem.Models
         public List<Customer> Customers { get; set; } = new List<Customer>();
         #endregion
         #region methods
-        public void AddCustomer(string? id, string? name, string? phone, string? email)
+        public bool AddCustomer(string? id, string? name, string? phone, string? email)
         {
+            if (string.IsNullOrWhiteSpace(id) || SearchCustomer(id))
+                return false;
+
             Customer customer = new Customer(id, name, phone, email);
             Customers.Add(customer);
+            return true;
+
         }
 
         public bool SearchCustomer(string? customerId)
         {
+            if(customerId is null)return false;
             foreach (Customer customer in Customers)
             {
                 if (customer.Id == customerId) return true;
@@ -34,11 +40,13 @@ namespace BankingSystem.Models
             if (customer is null) return false;
             if (SearchCustomer(customer.Id))
             {
-                foreach(Account account in customer.Accounts)
+                foreach (Account account in customer.Accounts)
                 {
                     Accounts.Remove(account);
                 }
+                customer.Accounts.Clear();
                 Customers.Remove(customer);
+
 
                 return true;
             }
@@ -50,10 +58,10 @@ namespace BankingSystem.Models
             return idaccountcounter;
         }
 
-        public bool AddAccount(string accounttype, Customer customer)
+        public bool AddAccount(AccountType accountType, Customer customer)
         {
-            if (customer is null) return false;
-            if (accounttype == "SavingAccount")
+            if (customer is null || !SearchCustomer(customer.Id)) return false;
+            if (accountType == AccountType.Saving)
             {
                 SavingsAccount savingsAccount = new SavingsAccount(GetNewAccountNumber(), customer);
                 Accounts.Add(savingsAccount);
@@ -61,7 +69,7 @@ namespace BankingSystem.Models
                 return true;
 
             }
-            else if (accounttype == "CurrentAccount")
+            else if (accountType == AccountType.Current)
             {
                 CurrentAccount currentAccount = new CurrentAccount(GetNewAccountNumber(), customer);
                 Accounts.Add(currentAccount);
@@ -82,7 +90,7 @@ namespace BankingSystem.Models
         public bool RemoveAccount(Customer customer, Account account)
         {
             if (account is null || customer is null) return false;
-            if (SearchAccount(account.AccountNumber))
+            if (SearchAccount(account.AccountNumber) && customer.Accounts.Contains(account))
             {
                 customer.Accounts.Remove(account);
                 Accounts.Remove(account);

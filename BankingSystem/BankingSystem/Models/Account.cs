@@ -9,15 +9,15 @@ namespace BankingSystem.Models
 {
     internal abstract class Account
     {
-        
+
 
         #region properties
-        public int AccountNumber { get; set; }
+        public int AccountNumber { get; }
 
         public Customer? Customer { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; }
         public decimal Balance { get; protected set; }
-        public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public List<Transaction> Transactions { get; } = new List<Transaction>();
         #endregion
 
 
@@ -26,7 +26,7 @@ namespace BankingSystem.Models
         {
             AccountNumber = accountNumber;
             Customer = customer;
-            CreatedAt= DateTime.Now;
+            CreatedAt = DateTime.Now;
         }
         #endregion
         #region methods
@@ -39,7 +39,7 @@ namespace BankingSystem.Models
             else
             {
                 Balance += amount;
-                Transaction transaction = new Transaction(amount, TransactionType.Deposit, this);
+                Transaction transaction = new Transaction(amount, TransactionType.Deposit, null, this);
                 Transactions.Add(transaction);
                 return true;
             }
@@ -57,7 +57,7 @@ namespace BankingSystem.Models
             {
                 acc.Balance += amount;
                 this.Balance -= amount;
-                Transaction transaction = new Transaction(amount, TransactionType.Transfer, this);
+                Transaction transaction = new Transaction(amount, TransactionType.Transfer, this, acc);
                 Transactions.Add(transaction);
                 acc.Transactions.Add(transaction);
 
@@ -69,7 +69,7 @@ namespace BankingSystem.Models
         {
             Console.WriteLine(Balance);
         }
-        
+
 
 
 

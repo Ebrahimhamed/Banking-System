@@ -8,16 +8,16 @@ namespace BankingSystem.Models
     {
         public decimal InterestRate { get; set; }
 
-        public SavingsAccount(int accountNumber, Customer? customer) : base(accountNumber, customer) 
+        public SavingsAccount(int accountNumber, Customer? customer) : base(accountNumber, customer)
         {
             InterestRate = 10;
         }
         public override bool Withdraw(decimal amount)
         {
-            if (amount>0&&amount <= Balance)
+            if (amount > 0 && amount <= Balance)
             {
-                Balance-=amount;
-                Transaction transaction = new Transaction(amount, TransactionType.Withdraw, this);
+                Balance -= amount;
+                Transaction transaction = new Transaction(amount, TransactionType.Withdraw, this, null);
                 Transactions.Add(transaction);
                 return true;
             }
@@ -32,5 +32,5 @@ namespace BankingSystem.Models
             return $"account number: {AccountNumber}, account type: savingsaccount ,account owner:{Customer?.Name},balance:{Balance}";
         }
     }
-    
+
 }

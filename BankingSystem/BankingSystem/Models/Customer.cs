@@ -6,13 +6,13 @@ namespace BankingSystem.Models
 {
     internal class Customer
     {
-       
+
         #region Properties
         public string? Id { get; set; }
         public string? Name { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public List<Account> Accounts { get; set; }=new List<Account>();
+        public List<Account> Accounts { get; set; } = new List<Account>();
         #endregion
 
         #region ctors

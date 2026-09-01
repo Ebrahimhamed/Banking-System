@@ -11,31 +11,32 @@ namespace BankingSystem.Models
         private static int idTransactionCounter = 0;
         #endregion
         #region properties
-        public int TransactionId { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
-        public TransactionType Type { get; set; }
-        public Account? Account { get; set; }
+        public int TransactionId { get; }
+        public decimal Amount { get; }
+        public DateTime Date { get; }
+        public TransactionType Type { get; }
+        public Account? FromAccount { get; }
+        public Account? ToAccount { get; }
         #endregion
 
         #region ctors
 
 
-        public Transaction(decimal amount, TransactionType type, Account? account)
+        public Transaction(decimal amount, TransactionType type, Account? account1, Account? account2)
         {
             TransactionId = GetNewTransactionId();
             Amount = amount;
             Date = DateTime.Now;
             Type = type;
-            Account = account;
+            FromAccount = account1;
+            ToAccount = account2;
         }
         #endregion
 
         #region methods 
-        public int GetNewTransactionId()
+        private static int GetNewTransactionId()
         {
-            idTransactionCounter++;
-            return idTransactionCounter;
+            return ++idTransactionCounter;
 
         }
         public override string ToString()

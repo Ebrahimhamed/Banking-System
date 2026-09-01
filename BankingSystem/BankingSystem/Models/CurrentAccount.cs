@@ -1,35 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿    using System;
+    using System.Collections.Generic;
+    using System.Text;
 
-namespace BankingSystem.Models
-{
-    internal class CurrentAccount : Account
+    namespace BankingSystem.Models
     {
-        public decimal OverdraftLimit { get; set; }
+        internal class CurrentAccount : Account
+        {
+            public decimal OverdraftLimit { get; set; }
 
-        public CurrentAccount(int accountNumber, Customer? customer):base(accountNumber,customer)
-        {
-            OverdraftLimit = 500;
-        }
-        public override bool Withdraw(decimal amount)
-        {
-            if(amount <= 0) return false;
-            if (OverdraftLimit+Balance>=amount)
+            public CurrentAccount(int accountNumber, Customer? customer):base(accountNumber,customer)
             {
-                Balance -= amount;
-                Transaction transaction = new Transaction(amount, TransactionType.Withdraw, this);
-                Transactions.Add(transaction);
-                return true;
+                OverdraftLimit = 500;
             }
-            else
+            public override bool Withdraw(decimal amount)
             {
-                return false;
+                if(amount <= 0) return false;
+                if (OverdraftLimit+Balance>=amount)
+                {
+                    Balance -= amount;
+                    Transaction transaction = new Transaction(amount, TransactionType.Withdraw, this,null);
+                    Transactions.Add(transaction);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-        }
-        public override string ToString()
-        {
-            return $"account number: {AccountNumber}, account type: currentaccount ,account owner:{Customer?.Name},balance:{Balance}";
+            public override string ToString()
+            {
+                return $"account number: {AccountNumber}, account type: currentaccount ,account owner:{Customer?.Name},balance:{Balance}";
+            }
         }
     }
-}
